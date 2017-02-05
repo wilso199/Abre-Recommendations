@@ -29,21 +29,23 @@
 	
 		//Get Post Data
 		$Student_ID=mysqli_real_escape_string($db, $_POST["Student_ID"]);
-		$RecLevel=mysqli_real_escape_string($db, $_POST["RecLevel"]);
+		$Staff_ID=mysqli_real_escape_string($db, $_POST["Staff_ID"]);
+		if(isset($_POST["RecLevelValue"])){ $RecLevelValue=mysqli_real_escape_string($db, $_POST["RecLevelValue"]); }else{ $RecLevelValue=""; }
+		if(isset($_POST["RecLevelName"])){ $RecLevelName=mysqli_real_escape_string($db, $_POST["RecLevelName"]); }else{ $RecLevelName=""; }
+		if(isset($_POST["RecCourse"])){ $RecCourse=mysqli_real_escape_string($db, $_POST["RecCourse"]); }else{ $RecCourse=""; }
 		$CourseName=mysqli_real_escape_string($db, $_POST["CourseName"]);
-		$Staff_ID=GetStaffID($_SESSION['useremail']);
 		$Year=date("Y");
-		
-		if($Student_ID!="" and $RecLevel!="")
-		{
 			
+		//If saving level
+		if($RecLevelValue!="")
+		{
 			$sql = "SELECT * FROM recommendations where StudentID='$Student_ID' and StaffID='$Staff_ID' and Year='$Year'";
 			$result = $db->query($sql);
 			$numrows = $result->num_rows;
 			if($numrows==0)
 			{
 				$stmt = $db->stmt_init();
-				$sql = "INSERT INTO recommendations (StudentID, StaffID, CurrentCourse, Recommendation, Year) VALUES ('$Student_ID', '$Staff_ID', '$CourseName', '$RecLevel', '$Year');";
+				$sql = "INSERT INTO recommendations (StudentID, StaffID, CurrentCourse, Recommendation, Recommendation_Level, Year) VALUES ('$Student_ID', '$Staff_ID', '$CourseName', '$RecLevelValue', '$RecLevelName', '$Year');";
 				$stmt->prepare($sql);
 				$stmt->execute();
 				$stmt->close();
@@ -51,9 +53,46 @@
 			}
 			else
 			{
-				mysqli_query($db, "UPDATE recommendations set Recommendation='$RecLevel' where StudentID='$Student_ID' and StaffID='$Staff_ID' and Year='$Year'") or die (mysqli_error($db));
-			}		
-		}
+				mysqli_query($db, "UPDATE recommendations set Recommendation='$RecLevelValue', Recommendation_Level='$RecLevelName' where StudentID='$Student_ID' and StaffID='$Staff_ID' and Year='$Year'") or die (mysqli_error($db));
+			}
+		}	
+		
+		//If saving course
+		if($RecCourse!="")
+		{
+			
+			//If saving course
+			if($RecCourse=="ClearCourse")
+			{
+				$sql = "SELECT * FROM recommendations where StudentID='$Student_ID' and StaffID='$Staff_ID' and Year='$Year'";
+				$result = $db->query($sql);
+				$numrows = $result->num_rows;
+				if($numrows!=0)
+				{
+					mysqli_query($db, "DELETE FROM recommendations where StudentID='$Student_ID' and StaffID='$Staff_ID' and Year='$Year'") or die (mysqli_error($db));
+				}
+			}
+			else
+			{
+				$sql = "SELECT * FROM recommendations where StudentID='$Student_ID' and StaffID='$Staff_ID' and Year='$Year'";
+				$result = $db->query($sql);
+				$numrows = $result->num_rows;
+				if($numrows==0)
+				{
+					$stmt = $db->stmt_init();
+					$sql = "INSERT INTO recommendations (StudentID, StaffID, CurrentCourse, Recommendation_Course, Year) VALUES ('$Student_ID', '$Staff_ID', '$CourseName', '$RecCourse', '$Year');";
+					$stmt->prepare($sql);
+					$stmt->execute();
+					$stmt->close();
+					$db->close();
+				}
+				else
+				{
+					mysqli_query($db, "UPDATE recommendations set Recommendation_Course='$RecCourse', Recommendation='', Recommendation_Level='' where StudentID='$Student_ID' and StaffID='$Staff_ID' and Year='$Year'") or die (mysqli_error($db));
+				}
+			}
+		}	
+			
 	
 	}
 

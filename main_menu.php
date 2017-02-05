@@ -16,20 +16,37 @@
     * You should have received a copy of the GNU General Public License
     * along with this program.  If not, see <http://www.gnu.org/licenses/>.
     */
-	
+
 	//Required configuration files
 	require(dirname(__FILE__) . '/../../configuration.php'); 
-	require_once(dirname(__FILE__) . '/../../core/abre_verification.php'); 
-	require(dirname(__FILE__) . '/../../core/abre_dbconnect.php'); 
-	require_once(dirname(__FILE__) . '/../../core/abre_functions.php'); 
+	require_once(dirname(__FILE__) . '/../../core/abre_verification.php');
+	require_once(dirname(__FILE__) . '/../../core/abre_functions.php');
+	require('permissions.php');
 	
-	//Check for Admin Authentication
-	$pagerestrictions="staff, students";
-	//if($_SESSION['usertype']=='staff')
-	if($_SESSION['useremail']=='crose@hcsdoh.org' or $_SESSION['useremail']=='rpate@hcsdoh.org' or $_SESSION['useremail']=='mholbrook@hcsdoh.org' or $_SESSION['useremail']=='zvanderveen@hcsdoh.org' or $_SESSION['useremail']=='webmaster@hcsdoh.org')
-	{
-		$drawerhidden=0;
-		$pagerestrictions="";
-	}
+	if($pagerestrictions=="")
+	{ 
 	
 ?>
+
+	    <div class="col s12">
+			<ul class="tabs_2" style='background-color: <?php echo sitesettings("sitecolor"); ?>'>
+				<li class="tab col s3 tab_1 supportmenu pointer" data="#recommendations"><a href="#recommendations" class='mdl-color-text--white'>Students</a></li>
+				<li class="tab col s3 tab_2 supportmenu pointer" data="#recommendations/teachers"><a href="#recommendations/teachers" class='mdl-color-text--white'>Teachers</a></li>
+			</ul>
+		</div>
+		
+<?php
+	}
+?>
+	
+<script>
+	
+	$(function()
+	{	
+		$( ".supportmenu" ).unbind().click(function()
+		{
+			window.open($(this).attr("data"), '_self');
+		});	
+	});
+	
+</script>

@@ -1,4 +1,4 @@
-<?php
+<?php 
 	
 	/*
 	* Copyright 2015 Hamilton City School District	
@@ -18,18 +18,23 @@
     */
 	
 	//Required configuration files
-	require(dirname(__FILE__) . '/../../configuration.php'); 
-	require_once(dirname(__FILE__) . '/../../core/abre_verification.php'); 
-	require(dirname(__FILE__) . '/../../core/abre_dbconnect.php'); 
+	require_once(dirname(__FILE__) . '/../../core/abre_verification.php');
+	require(dirname(__FILE__) . '/../../configuration.php');
 	require_once(dirname(__FILE__) . '/../../core/abre_functions.php'); 
+	require_once('functions.php');
+	require_once('permissions.php');
 	
-	//Check for Admin Authentication
-	$pagerestrictions="staff, students";
-	//if($_SESSION['usertype']=='staff')
-	if($_SESSION['useremail']=='crose@hcsdoh.org' or $_SESSION['useremail']=='rpate@hcsdoh.org' or $_SESSION['useremail']=='mholbrook@hcsdoh.org' or $_SESSION['useremail']=='zvanderveen@hcsdoh.org' or $_SESSION['useremail']=='webmaster@hcsdoh.org')
+	if($pagerestrictions=="")
 	{
-		$drawerhidden=0;
-		$pagerestrictions="";
+		
+		echo "<div class='page_container page_container_limit mdl-shadow--4dp'>";
+		echo "<div class='page'>";
+		
+			include "teacher_recommendation_results.php";
+					
+		echo "</div>";
+		echo "</div>";
+		
 	}
-	
+
 ?>
