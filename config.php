@@ -31,7 +31,7 @@
 	$pageorder=4;
 	$pagetitle="Recommendations";
 	$description="A teacher recommendation system.";
-	$version="0.0.1";
+	$version="0.0.2";
 	$repo="abreio/Abre-Recommendations";
 	$pageicon="check_circle";
 	$pagepath="recommendations";
