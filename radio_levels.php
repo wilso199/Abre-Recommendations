@@ -60,7 +60,7 @@
 						echo "<input "; if($Recommendation_Level=='Core'){ echo "checked='checked'"; }; echo " class='recommend' data-levelvalue='1' data-levelname='Core' data-currentcourse='$CourseName' data-studentid='$StudentID' name='Level-$StudentID' type='radio' id='Core-$StudentID' /><label for='Core-$StudentID' style='margin: 0 0 0 20px;'>Core</label>";		
 					}
 					
-					if(strpos($AvailableLevels, 'Core/CP') !== false)
+					if(strpos($AvailableLevels, 'Core') !== false && strpos($AvailableLevels, 'CP') !== false)
 					{
 					echo "<input "; if($Recommendation_Level=='Core/CP'){ echo "checked='checked'"; }; echo " class='recommend' data-levelvalue='2' data-levelname='Core/CP' data-currentcourse='$CourseName' data-studentid='$StudentID' name='Level-$StudentID' type='radio' id='CoreCP-$StudentID' /><label for='CoreCP-$StudentID' style='margin: 0 0 0 20px;'>Core/CP</label>";
 					}
@@ -70,7 +70,7 @@
 						echo "<input "; if($Recommendation_Level=='CP'){ echo "checked='checked'"; }; echo " class='recommend' data-levelvalue='3' data-levelname='CP' data-currentcourse='$CourseName' data-studentid='$StudentID' name='Level-$StudentID' type='radio' id='CP-$StudentID' /><label for='CP-$StudentID' style='margin: 0 0 0 20px;'>CP</label>";
 					}
 					
-					if(strpos($AvailableLevels, 'CP/Honors') !== false)
+					if(strpos($AvailableLevels, 'CP') !== false && strpos($AvailableLevels, 'Honors') !== false)
 					{
 						echo "<input "; if($Recommendation_Level=='CP/Honors'){ echo "checked='checked'"; }; echo " class='recommend' data-levelvalue='4' data-levelname='CP/Honors' data-currentcourse='$CourseName' data-studentid='$StudentID' name='Level-$StudentID' type='radio' id='CPHonors-$StudentID' /><label for='CPHonors-$StudentID' style='margin: 0 0 0 20px;'>CP/Honors</label>";
 					}
