@@ -48,7 +48,7 @@
 			$counter++;
 			if($counter==1)
 			{
-				echo "<table class='striped'>";
+				echo "<table class='responsive-table striped'>";
 				echo "<thead><tr>";
 				echo "<th></th>";
 				echo "<th>Student</th><th>Current Course</th><th>Course</th><th>Level</th></tr></thead>";

@@ -56,7 +56,7 @@
 								echo "</div>";	
 								echo "<div class='row'>";
 								echo "<div class='col s12'>";
-								echo "<table class='striped'>";
+								echo "<table class='responsive-table striped'>";
 								echo "<thead><tr>";
 									echo "<th>Teacher</th><th>Current Course</th><th>Recommended Course</th><th>Recommended Level</th><th>AIR Points</th><th>Calculated Level</th>";
 								echo "</tr></thead>";
