@@ -47,16 +47,7 @@
 				if($Recommendation_Course==$CourseNameDrop){ echo "<option value='$CourseNameDrop' selected='selected'>$CourseNameDrop</option>"; }else{ echo "<option value='$CourseNameDrop'>$CourseNameDrop</option>"; }
 			}
 		echo "</select>";
+		
 	}
 
 ?>
-
-<script>
-	
-	$(function() 
-	{
-		
-			
-	});		
-		
-</script>

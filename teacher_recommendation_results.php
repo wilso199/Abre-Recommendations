@@ -50,7 +50,7 @@
 			{
 				echo "<table class='striped'>";
 				echo "<thead><tr>";
-				//echo "<th></th>";
+				echo "<th></th>";
 				echo "<th>Student</th><th>Current Course</th><th>Course</th><th>Level</th></tr></thead>";
 				echo "<tbody>";
 			}
@@ -76,8 +76,8 @@
 			}
 						
 			echo "<tr>";
-				//echo "<td><img src='$StudentPicture' class='circle demoimage' style='width:40px; height:40px; margin-left:10px;'></td>";
-				echo "<td>$FirstName $LastName<br>$StudentID</td>";
+				echo "<td width='60px;'><img src='$StudentPicture' class='circle demoimage' style='width:40px; height:40px; margin-left:10px;'></td>";
+				echo "<td width='120px;'>$FirstName $LastName<br>$StudentID</td>";
 				echo "<td width='120px;' class='truncate'>$CourseName</td>";
 				echo "<td width='120px;'>";
 						include "dropdown_course.php";

@@ -87,9 +87,9 @@
 		function AdminCheckRecommended($email){
 			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
 			$email=encrypt($email, "");
-			$contract=encrypt('Director of Secondary Programs', "");
-			$contract2=encrypt('Counselor', "");
-			$sql = "SELECT *  FROM directory where email='$email' and (title='$contract' or title='$contract2')";
+			$contract=encrypt('Administrator', "");
+			$title=encrypt('Counselor', "");
+			$sql = "SELECT *  FROM directory where email='$email' and (contract='$contract' or title='$title')";
 			$result = $db->query($sql);
 			$count = $result->num_rows;
 			if($count>=1)

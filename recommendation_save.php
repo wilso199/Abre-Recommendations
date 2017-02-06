@@ -30,6 +30,7 @@
 		//Get Post Data
 		$Student_ID=mysqli_real_escape_string($db, $_POST["Student_ID"]);
 		$Staff_ID=mysqli_real_escape_string($db, $_POST["Staff_ID"]);
+		$Staff_ID=strtoupper($Staff_ID);
 		if(isset($_POST["RecLevelValue"])){ $RecLevelValue=mysqli_real_escape_string($db, $_POST["RecLevelValue"]); }else{ $RecLevelValue=""; }
 		if(isset($_POST["RecLevelName"])){ $RecLevelName=mysqli_real_escape_string($db, $_POST["RecLevelName"]); }else{ $RecLevelName=""; }
 		if(isset($_POST["RecCourse"])){ $RecCourse=mysqli_real_escape_string($db, $_POST["RecCourse"]); }else{ $RecCourse=""; }

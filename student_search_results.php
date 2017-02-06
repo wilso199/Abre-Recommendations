@@ -38,25 +38,31 @@
 			$FirstName=htmlspecialchars($value["FirstName"], ENT_QUOTES);
 			$LastName=htmlspecialchars($value["LastName"], ENT_QUOTES);
 			$StudentID=htmlspecialchars($value["StudentId"], ENT_QUOTES);
-			
-			echo "<div class='row'>";
-				echo "<div class='col s12'><h4>$FirstName $LastName</h4></div>";
-			echo "</div>";
-				
-			echo "<div class='row'>";
-					
-				//Display Mock Schedule
-				echo "<div class='col s12'>";
-					echo "<table class='striped'>";
-						echo "<thead><tr>";
-							echo "<th>Teacher</th><th>Current Course</th><th>Recommended Course</th><th>Recommended Level</th><th>AIR Points</th><th>Calculated Level</th>";
-						echo "</tr></thead>";
-						echo "<tbody>";
+			$StudentPicture="/modules/".basename(__DIR__)."/image.php?student=$StudentID";
 								
-						$query2 = "SELECT * FROM recommendations where StudentID='$StudentID' and Year='2017'";
+						$query2 = "SELECT * FROM recommendations where StudentID='$StudentID' and StaffID!='' and Year='2017'";
 						$dbreturn2 = databasequery($query2);
+						$foundrecs=count($dbreturn2);
+						$counter=0;;
 						foreach ($dbreturn2 as $value2)
 						{
+							$counter++;
+							if($counter==1)
+							{
+								echo "<div class='row'>";
+									echo "<div class='center-align'><img src='$StudentPicture' class='circle demoimage' style='width:80px; height:80px;'></div>";
+									echo "<div class='col s12'><h4 class='center-align'>$FirstName $LastName</h4></div>";
+									echo "<div class='col s12'><h4>Staff Recommendations</h4></div>";
+								echo "</div>";	
+								echo "<div class='row'>";
+								echo "<div class='col s12'>";
+								echo "<table class='striped'>";
+								echo "<thead><tr>";
+									echo "<th>Teacher</th><th>Current Course</th><th>Recommended Course</th><th>Recommended Level</th><th>AIR Points</th><th>Calculated Level</th>";
+								echo "</tr></thead>";
+								echo "<tbody>";
+							}
+							
 							$TeacherRecommendationPoints=htmlspecialchars($value2["Recommendation"], ENT_QUOTES);
 							$Recommendation_Course=htmlspecialchars($value2["Recommendation_Course"], ENT_QUOTES);
 							$Recommendation_Level=htmlspecialchars($value2["Recommendation_Level"], ENT_QUOTES);
@@ -183,19 +189,89 @@
 							{
 								echo "<td><b>$Verbage</b></td></tr>";
 							}
+							
+							if($counter==$foundrecs)
+							{
+								echo "</tbody>";
+								echo "</table>";
+								echo "</div>";
+							}
 
 						}
 								
-						echo "</tbody>";
-					echo "</table>";
-				echo "</div>";
+						if($foundrecs!=0)
+						{ 
+							//Add Electives
+							echo "<div class='row'>";
+								echo "<div class='col s12'><h4>Electives</h4></div>";
+								
+								echo "<div class='col s12'>";
+									$Year=date("Y");
+									for ($x = 1; $x <= 8; $x++)
+									{
+										echo "<select class='browser-default recommend_elective_dropdown' data-studentid='$StudentID' data-electiveorder='$x'>";
+											echo "<option value=''></option>";
+											
+										
+											//Check to see if option already saved
+											$Recommendation_Course='';
+											$query3 = "SELECT * FROM recommendations where StaffId='' and Recommendation_Level='Elective' and StudentID='$StudentID' and Recommendation='$x' and Year='$Year'";
+											$dbreturn3 = databasequery($query3);
+											foreach ($dbreturn3 as $value3)
+											{
+												$Recommendation_Course=htmlspecialchars($value3["Recommendation_Course"], ENT_QUOTES);
+												echo "<option value='$Recommendation_Course' selected='selected'>$Recommendation_Course</option>";
+											}
+											
+											$query2 = "SELECT * FROM recommendations_courses where Subject='Elective'";
+											$dbreturn2 = databasequery($query2);
+											foreach ($dbreturn2 as $value2)
+											{
+												
+												$ElectiveCourseName=htmlspecialchars($value2["CourseName"], ENT_QUOTES);
+												echo "<option value='$ElectiveCourseName'>$ElectiveCourseName</option>";
+											}
+											
+										echo "</select>";
+										echo "<br>";
+									} 
+								echo "</div>";	
+								
+							echo "</div>";	
+						}
+						else
+						{
+							echo "<h5 class='center-align'>No recommendations have been made for $FirstName $LastName</h5>";
+						}
 					
 			echo "</div>";
 				
 		}
 		
-		if($studentfound==0){ echo "<h5 class='center-align'>No recommendations have been made for this student</h5>"; }
+		if($studentfound==0){ echo "<h5 class='center-align'>Student Not Found</h5>"; }
 				
 	}
 
 ?>
+
+<script>
+	
+	$(function() 
+	{
+		
+		//Save Course Recommendation
+		$(".recommend_elective_dropdown ").change(function()
+		{
+			var StudentID = $(this).data('studentid');
+			var RecommendedElective = $(this).val();
+			var ElectiveOrder = $(this).data('electiveorder');
+			
+			//Save Dropdown
+			$.post( "modules/<?php echo basename(__DIR__); ?>/recommendation_elective_save.php", { Student_ID: StudentID, Elective_Number: ElectiveOrder, Elective_Name: RecommendedElective })
+			
+		});
+			
+	});	
+	
+		
+</script>
