@@ -30,8 +30,8 @@
 	$drawerhidden=1;
 	$pageorder=4;
 	$pagetitle="Recommendations";
-	$description="A teacher recommendation system.";
-	$version="0.0.3";
+	$description="Teacher recommendation and course placement calculation system.";
+	$version="0.0.5";
 	$repo="abreio/Abre-Recommendations";
 	$pageicon="check_circle";
 	$pagepath="recommendations";
