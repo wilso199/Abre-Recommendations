@@ -61,6 +61,23 @@
 						$('.tab_2').addClass('tabmenuover');
 					});
 					
+			    },
+			    'recommendations/courses': function(name)
+				{
+				    $('#navigation_top').hide();
+				    $('#content_holder').hide();
+				    $('#loader').show();
+				    $('#titletext').text('Recommendations');
+				    document.title = 'Recommendations';
+					$('#content_holder').load('modules/".basename(__DIR__)."/course_search.php', function() { init_page(); });
+					
+					//Load Navigation
+					$('#navigation_top').show();
+					$('#navigation_top').load('modules/".basename(__DIR__)."/main_menu.php', function() {	
+						$('#navigation_top').show();
+						$('.tab_3').addClass('tabmenuover');
+					});
+					
 			    },";
 		}
 		else

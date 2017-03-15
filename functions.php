@@ -26,6 +26,17 @@
 	if($pagerestrictions=="")
 	{
 		
+		//Save Placement
+		function SavePlacement($StudentID, $Recommendation_Course, $Verbage){
+			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+			mysqli_query($db, "DELETE FROM recommendations_placement where StudentID='$StudentID' and Course='$Recommendation_Course'") or die (mysqli_error($db));
+			$stmt = $db->stmt_init();
+			$sql = "INSERT INTO recommendations_placement (StudentID, Course, Level) VALUES ('$StudentID', '$Recommendation_Course', '$Verbage');";
+			$stmt->prepare($sql);
+			$stmt->execute();
+			$stmt->close();
+		}
+		
 		//Get Primary Subject of Teacher
 		function GetTeacherSubjectbyStaffID($StaffID){
 			

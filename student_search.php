@@ -81,6 +81,7 @@
 		    	student_search = btoa(student_search);
 	
 				$("#searchsearchresults").load('modules/<?php echo basename(__DIR__); ?>/student_search_results.php?student_search='+student_search, function() {
+					mdlregister();
 					$('#loadingprogress').hide();
 					$("#searchsearchresults").show();
 				});

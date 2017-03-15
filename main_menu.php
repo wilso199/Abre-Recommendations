@@ -32,6 +32,7 @@
 			<ul class="tabs_2" style='background-color: <?php echo sitesettings("sitecolor"); ?>'>
 				<li class="tab col s3 tab_1 supportmenu pointer" data="#recommendations"><a href="#recommendations" class='mdl-color-text--white'>Students</a></li>
 				<li class="tab col s3 tab_2 supportmenu pointer" data="#recommendations/teachers"><a href="#recommendations/teachers" class='mdl-color-text--white'>Teachers</a></li>
+				<li class="tab col s3 tab_3 supportmenu pointer" data="#recommendations/courses"><a href="#recommendations/courses" class='mdl-color-text--white'>Courses</a></li>
 			</ul>
 		</div>
 		
