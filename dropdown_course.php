@@ -32,13 +32,13 @@
 		
 		echo "<select class='browser-default recommend_dropdown' data-currentcourse='$CourseName' data-studentid='$StudentID'>";
 			echo "<option value='ClearCourse'></option>";
-			if($Staff_Subject=="")
+			if($Staff_Subject!="Math" && $Staff_Subject!="Science" && $Staff_Subject!="Social Studies" && $Staff_Subject!="Language Arts")
 			{
 				$query = "SELECT * FROM recommendations_courses";
 			}
 			else
 			{
-				$query = "SELECT * FROM recommendations_courses where Subject='$Staff_Subject' order by Subject, CourseName";
+				$query = "SELECT * FROM recommendations_courses where Subject='$Staff_Subject' or Subject='' order by Subject, CourseName";
 			}
 			$dbreturn = databasequery($query);
 			foreach ($dbreturn as $value)

@@ -210,7 +210,7 @@
 					
 					//Display the Grades
 					echo "<td>";
-						$query3 = "SELECT * FROM Abre_StudentGrades where StudentID='$StudentID' and StaffID='$StaffID' and MarkingPeriodGrade!='' and (MarkingPeriodCode='Qtr1' or MarkingPeriodCode='Qtr2' or MarkingPeriodCode='Qtr3' or MarkingPeriodCode='Qtr4')";
+						$query3 = "SELECT * FROM Abre_StudentGrades where StudentID='$StudentID' and StaffID='$StaffID' and MarkingPeriodGrade!='' and (MarkingPeriodGrade LIKE '%A%' or MarkingPeriodGrade LIKE '%B%' or MarkingPeriodGrade LIKE '%C%' or MarkingPeriodGrade LIKE '%D%' or MarkingPeriodGrade LIKE '%F%') and (MarkingPeriodCode='Qtr1' or MarkingPeriodCode='Qtr2' or MarkingPeriodCode='Qtr3' or MarkingPeriodCode='Qtr4')";
 						$dbreturn3 = databasequery($query3);
 						$returnedrecords=count($dbreturn3);
 						$returnedgradecount=0;
@@ -348,6 +348,19 @@
 						
 					    $numerator=$TeacherWeight+$AIRWeight;
 						$Denominator=$TeacherHighestScore*$TeacherWeighting+$possiblesubjectpoints*$AIRWeighting;
+					} elseif ($possiblesubjectpoints==0 && $possiblegradepoints!=0 && $StarGE!=0) {
+						$found=1;
+						$GradeWeighting=.5;
+						$StarWeighting=.45;
+						$TeacherWeighting=.05;
+						$TeacherWeight=$TeacherRecommendationPoints*$TeacherWeighting;
+						$GradeWeight=$GradeRecommendationPoints*$GradeWeighting;
+						$StarWeight=$StarRecommendationPoints*$StarWeighting;
+						
+						$verbagebreakdown="Teacher Rec 5%<br>Grades 50%<br>Star 45%";
+						
+					    $numerator=$TeacherWeight+$GradeWeight+$StarWeight;
+						$Denominator=$TeacherHighestScore*$TeacherWeighting+$possiblegradepoints*$GradeWeighting+$StarHighestScore*$StarWeighting;
 					} elseif ($possiblesubjectpoints==0 && $possiblegradepoints!=0 && $StarGE==0) {
 						$found=1;
 						$GradeWeighting=.5;
@@ -360,26 +373,33 @@
 						$Denominator=$TeacherHighestScore*$TeacherWeighting+$possiblegradepoints*$GradeWeighting;
 					}
 					
-					$CalculatedScore=$numerator/$Denominator;
-							
-					$CalculatedScore=$CalculatedScore*100;
-					$CalculatedScore=round($CalculatedScore);
-					
-					if($CalculatedScore<=60){ $Verbage="Core"; }
-					if($CalculatedScore>60 && $CalculatedScore<80){ $Verbage="CP"; }
-					if($CalculatedScore>=80)
-					{ 
-						if($Recommendation_Level=='Honors'){ 
-							$Verbage="Honors"; 
-						} elseif ($Recommendation_Level=='AP'){
-							$Verbage="AP";
-						} elseif ($Recommendation_Level=='CCP'){
-							$Verbage="CCP";
-						} elseif ($Recommendation_Level=="CP/Honors"){
-							$Verbage="Honors";
-						} elseif ($Recommendation_Level!=""){
-							$Verbage="Not Found"; 
-						}
+					if($possiblesubjectpoints==0 && $possiblegradepoints==0 && $StarGE==0)
+					{
+						$Verbage=$Recommendation_Level;
+					}
+					else
+					{
+						$CalculatedScore=$numerator/$Denominator;
+								
+						$CalculatedScore=$CalculatedScore*100;
+						$CalculatedScore=round($CalculatedScore);
+						
+						if($CalculatedScore<=60){ $Verbage="Core"; }
+						if($CalculatedScore>60 && $CalculatedScore<80){ $Verbage="CP"; }
+						if($CalculatedScore>=80)
+						{ 
+							if($Recommendation_Level=='Honors'){ 
+								$Verbage="Honors"; 
+							} elseif ($Recommendation_Level=='AP'){
+								$Verbage="AP";
+							} elseif ($Recommendation_Level=='CCP'){
+								$Verbage="CCP";
+							} elseif ($Recommendation_Level=="CP/Honors"){
+								$Verbage="Honors";
+							} elseif ($Recommendation_Level!=""){
+								$Verbage="Not Found"; 
+							}
+						}						
 					}
 					
 					//Check to see if level exists, if not choose next highest level
@@ -529,7 +549,7 @@
 						
 						
 						//Save Final Placement to Database
-						SavePlacement($StudentID, $Recommendation_Course, $Verbage);
+						SavePlacement($StudentID, "$FirstName $LastName", $StudentCurrentGrade, "$Staff_FirstName $Staff_LastName", $Recommendation_Level, $Recommendation_Course, $Verbage, $CalculatedScore);
 								
 							
 						echo "</select>";

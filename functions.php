@@ -27,11 +27,21 @@
 	{
 		
 		//Save Placement
-		function SavePlacement($StudentID, $Recommendation_Course, $Verbage){
-			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');	
+		function SavePlacement($StudentID, $StudentName, $CurrentGrade, $Teacher, $Recommendation_Level, $Recommendation_Course, $Verbage, $CalculatedPercentage){
+			require(dirname(__FILE__) . '/../../core/abre_dbconnect.php');
+			
+			//Given the Course and Level, find the course code
+			$query = "SELECT * FROM recommendations_codes where Course = '$Recommendation_Course' and Level = '$Verbage'";
+			$dbreturn = databasequery($query);
+			$CourseCode="";
+			foreach ($dbreturn as $value)
+			{ 
+				$CourseCode=$value["CourseCode"];
+			}
+				
 			mysqli_query($db, "DELETE FROM recommendations_placement where StudentID='$StudentID' and Course='$Recommendation_Course'") or die (mysqli_error($db));
 			$stmt = $db->stmt_init();
-			$sql = "INSERT INTO recommendations_placement (StudentID, Course, Level) VALUES ('$StudentID', '$Recommendation_Course', '$Verbage');";
+			$sql = "INSERT INTO recommendations_placement (StudentID, StudentName, CurrentGrade, Teacher, Recommendation_Level, Course, Level, CalculatedPercentage, CourseCode) VALUES ('$StudentID', '$StudentName', '$CurrentGrade', '$Teacher', '$Recommendation_Level', '$Recommendation_Course', '$Verbage', '$CalculatedPercentage', '$CourseCode');";
 			$stmt->prepare($sql);
 			$stmt->execute();
 			$stmt->close();

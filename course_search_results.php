@@ -31,20 +31,25 @@
 		$building=base64_decode($building);
 		
 		$gradequery=NULL;
+		$schoolquery=NULL;
 		
 		if($building=="Garfield Middle School")
 		{
 			$gradequery="Abre_Students.CurrentGrade='06' or Abre_Students.CurrentGrade='07'";
+			$schoolquery="SchoolName='Fairwood Elementary' or SchoolName='Crawford Woods Elementary' or SchoolName='Linden Elementary' or SchoolName='Ridgeway Elementary' or SchoolName='Riverview Elementary' or SchoolName='Garfield Middle School'";
 		} elseif ($building=="Wilson Middle School"){
 			$gradequery="Abre_Students.CurrentGrade='06' or Abre_Students.CurrentGrade='07'";
+			$schoolquery="SchoolName='Highland Elementary' or SchoolName='Brookwood Elementary' or SchoolName='Bridgeport Elementary' or SchoolName='Riverview Elementary' or SchoolName='Wilson Middle School'";
 		} elseif ($building=="Hamilton Freshman School"){
 			$gradequery="Abre_Students.CurrentGrade='08'";
+			$schoolquery="SchoolName='Garfield Middle School' or SchoolName='Wilson Middle School'";
 		} elseif ($building=="Hamilton High School"){
 			$gradequery="Abre_Students.CurrentGrade='09' or Abre_Students.CurrentGrade='10' or Abre_Students.CurrentGrade='11' or Abre_Students.CurrentGrade='12'";
+			$schoolquery="SchoolName='Hamilton Freshman School' or SchoolName='Hamilton High School'";
 		}
 		
 		$counter=0;
-		$query = "SELECT Count(*), Course, Level FROM recommendations_placement LEFT JOIN Abre_Students ON recommendations_placement.StudentID=Abre_Students.StudentId where ($gradequery) group by recommendations_placement.Course, recommendations_placement.Level";
+		$query = "SELECT Count(*), recommendations_placement.Course, recommendations_placement.Level, Abre_Students.SchoolName FROM recommendations_placement LEFT JOIN Abre_Students ON recommendations_placement.StudentID=Abre_Students.StudentId where ($gradequery) and ($schoolquery) group by recommendations_placement.Course, recommendations_placement.Level";
 		$dbreturn = databasequery($query);
 		$resultcount=count($dbreturn);
 		foreach ($dbreturn as $value)
