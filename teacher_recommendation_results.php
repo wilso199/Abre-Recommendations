@@ -1,20 +1,19 @@
 <?php 
 	
 	/*
-	* Copyright 2015 Hamilton City School District	
-	* 		
+	* Copyright (C) 2016-2017 Abre.io LLC
+	*
 	* This program is free software: you can redistribute it and/or modify
-    * it under the terms of the GNU General Public License as published by
-    * the Free Software Foundation, either version 3 of the License, or
-    * (at your option) any later version.
-	* 
+    * it under the terms of the Affero General Public License version 3
+    * as published by the Free Software Foundation.
+	*
     * This program is distributed in the hope that it will be useful,
     * but WITHOUT ANY WARRANTY; without even the implied warranty of
     * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    * GNU General Public License for more details.
-	* 
-    * You should have received a copy of the GNU General Public License
-    * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+    * GNU Affero General Public License for more details.
+	*
+    * You should have received a copy of the Affero General Public License
+    * version 3 along with this program.  If not, see https://www.gnu.org/licenses/agpl-3.0.en.html.
     */
 	
 	//Required configuration files
@@ -39,7 +38,7 @@
 		
 		$CurrentSememester=GetCurrentSemesterRecommended();
 					
-		$query = "SELECT * FROM Abre_StudentSchedules where StaffId='$StaffID' and (TermCode='$CurrentSememester' or TermCode='Year') group by StudentID order by CourseName, LastName";
+		$query = "SELECT * FROM Abre_StudentSchedules where StaffId='$StaffID' and (TermCode='$CurrentSememester' or TermCode='Year') order by CourseName, LastName";
 		$dbreturn = databasequery($query);
 		$totalstudents = count($dbreturn);
 		$counter=0;
@@ -66,7 +65,7 @@
 			$Recommendation_Level='';
 						
 			//Check to see if option already saved
-			$query2 = "SELECT * FROM recommendations where StaffId='$StaffID' and StudentID='$StudentID' and Year='$Year'";
+			$query2 = "SELECT * FROM recommendations where StaffID='$StaffID' and StudentID='$StudentID' and CurrentCourse='$CourseName' and Year='$Year'";
 			$dbreturn2 = databasequery($query2);
 			foreach ($dbreturn2 as $value2)
 			{
@@ -74,6 +73,9 @@
 				$Recommendation_Course=htmlspecialchars($value2["Recommendation_Course"], ENT_QUOTES);
 				$Recommendation_Level=htmlspecialchars($value2["Recommendation_Level"], ENT_QUOTES);
 			}
+			
+			$coursenameslug=preg_replace('/\PL/u', '', $CourseName);
+			$radioid=$coursenameslug."_radio_".$StudentID;
 						
 			echo "<tr>";
 				echo "<td width='60px;'><img src='$StudentPicture' class='circle demoimage' style='width:40px; height:40px; margin-left:10px;'></td>";
@@ -82,8 +84,8 @@
 				echo "<td width='120px;'>";
 						include "dropdown_course.php";
 				echo "</td>";
-							
-				echo "<td width='700px;' id='radio_$StudentID'>";
+				
+				echo "<td width='700px;' id='$radioid'>";
 						include "radio_levels.php";
 				echo "</td>";
 			echo "</tr>";
@@ -114,7 +116,8 @@
 		$(".recommend_dropdown ").change(function()
 		{
 			var StudentID = $(this).data('studentid');
-			var RadioDiv='#radio_'+StudentID;
+			var Radio = $(this).data('radio');
+			var RadioDiv='#'+Radio;
 			var CurrentCourse = $(this).data('currentcourse');
 			var RecommendedCourse = $(this).val();
 			var StaffID = "<?php echo $StaffID; ?>";
@@ -123,7 +126,7 @@
 			$.post( "modules/<?php echo basename(__DIR__); ?>/recommendation_save.php", { Student_ID: StudentID, RecCourse: RecommendedCourse, CourseName: CurrentCourse, Staff_ID: StaffID  })
 			
 			//Update Levels
-			$.post( "modules/<?php echo basename(__DIR__); ?>/radio_levels.php", { Student_ID: StudentID, RecCourse: RecommendedCourse })
+			$.post( "modules/<?php echo basename(__DIR__); ?>/radio_levels.php", { Student_ID: StudentID, RecCourse: RecommendedCourse, CourseName: CurrentCourse })
 			.done(function(data) {
 				$(RadioDiv).html(data);
   			});
